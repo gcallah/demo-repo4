@@ -1,0 +1,20 @@
+language: python
+python:
+    - '3.8'
+
+install:
+    - pip install -r requirements-dev.txt
+
+env:
+    - PYTHONPATH=/home/travis/build/gcallah/flask-api
+
+script:
+    - make tests
+
+# deploy to heroku on push to master
+# deploy:
+#     - provider: heroku
+#       api_key: $HEROKU_API_KEY
+#       app: flask-api
+#       on:
+#           branch: master
