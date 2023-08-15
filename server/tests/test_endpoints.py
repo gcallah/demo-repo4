@@ -1,15 +1,6 @@
 
-from unittest import TestCase, skip 
-
 import server.endpoints as ep
 
 
-class EndpointTestCase(TestCase):
-    def setUp(self):
-        pass
-
-    def tearDown(self):
-        pass
-
-    def test_hello(self):
-       self.assertTrue(True)
+def test_hello():
+    assert True
