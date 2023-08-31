@@ -5,10 +5,14 @@ The endpoint called `endpoints` will return all available endpoints.
 
 from flask import Flask
 from flask_restx import Resource, Api
-import db.db as db
+# import db.db as db
 
 app = Flask(__name__)
 api = Api(app)
+
+MAIN_MENU = 'MainMenu'
+MAIN_MENU_NM = "Welcome to Text Game!"
+USERS = 'users'
 
 
 @api.route('/hello')
@@ -39,13 +43,36 @@ class Endpoints(Resource):
         return {"Available endpoints": endpoints}
 
 
-@api.route('/pets')
-class Pets(Resource):
+@api.route(f'/{MAIN_MENU}')
+@api.route('/')
+class MainMenu(Resource):
+    """
+    This will deliver our main menu.
+    """
+    def get(self):
+        """
+        Gets the main game menu.
+        """
+        return {'Title': MAIN_MENU_NM,
+                'Default': 2,
+                'Choices': {
+                    '1': {'url': '/', 'method': 'get',
+                          'text': 'List Available Characters'},
+                    '2': {'url': '/',
+                          'method': 'get', 'text': 'List Active Games'},
+                    '3': {'url': f'/{USERS}',
+                          'method': 'get', 'text': 'List Users'},
+                    'X': {'text': 'Exit'},
+                }}
+
+
+@api.route(f'/{USERS}')
+class Users(Resource):
     """
     This class supports fetching a list of all pets.
     """
     def get(self):
         """
-        This method returns all pets.
+        This method returns all users.
         """
-        return db.fetch_pets()
+        return 'Current Users:\nSai\nAbhishek\nKristian\n'
