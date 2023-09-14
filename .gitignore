@@ -3,6 +3,9 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# virtual env
+demo-repo4-venv
+
 # vim files
 *~
 
