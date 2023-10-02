@@ -106,7 +106,7 @@ class UserMenu(Resource):
 @api.route(f'{USERS_EP}')
 class Users(Resource):
     """
-    This class supports fetching a list of all pets.
+    This class supports fetching a list of all users.
     """
     def get(self):
         """
