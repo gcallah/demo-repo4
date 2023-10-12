@@ -8,13 +8,13 @@ PYTESTFLAGS = -vv --verbose --cov-branch --cov-report term-missing --tb=short -W
 
 FORCE:
 
-prod: tests github
+prod: all_tests github
 
 github: FORCE
 	- git commit -a
 	git push origin master
 
-tests: lint unit
+all_tests: lint unit
 
 unit: FORCE
 	cd $(API_DIR); pytest $(PYTESTFLAGS) --cov=$(PKG)
