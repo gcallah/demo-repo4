@@ -1,0 +1,44 @@
+# This is a workflow to test and deploy our demo app.
+
+name: Demo CI/CD
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+env:
+  DEMO_HOME: /home/runner/work/demo-repo4/demo-repo4/
+  PYTHONPATH: /home/runner/work/demo-repo4/demo-repo4/
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    environment: pa_deploy
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      - name: Install MongoDB
+        uses: supercharge/mongodb-github-action@1.8.0
+
+      - name: Install Python packages.
+        run: make dev_env
+
+      - name: Run Python tests.
+        run: make all_tests
+        
+          # - name: Deploy to PythonAnywhere
+          # run: ./deploy.sh
+          # env:
+          # DEMO_PA_PWD: ${{secrets.DEMO_PA_PWD}}
