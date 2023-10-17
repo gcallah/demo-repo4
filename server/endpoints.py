@@ -6,6 +6,7 @@ The endpoint called `endpoints` will return all available endpoints.
 from flask import Flask
 from flask_restx import Resource, Api
 
+import data.games as gms
 import data.users as users
 
 app = Flask(__name__)
@@ -17,6 +18,9 @@ MAIN_MENU_EP = '/MainMenu'
 MAIN_MENU_NM = "Welcome to Text Game!"
 HELLO_EP = '/hello'
 HELLO_RESP = 'hello'
+GAMES_EP = '/games'
+GAME_MENU_EP = '/game_menu'
+GAME_MENU_NM = 'Game Menu'
 # USERS = 'users'
 USERS_EP = '/users'
 USER_MENU_EP = '/user_menu'
@@ -115,8 +119,26 @@ class Users(Resource):
         """
         return {
             TYPE: DATA,
-            TITLE: 'Current Users',
+            TITLE: 'Current Games',
             DATA: users.get_users(),
             MENU: USER_MENU_EP,
+            RETURN: MAIN_MENU_EP,
+        }
+
+
+@api.route(f'{GAMES_EP}')
+class Games(Resource):
+    """
+    This class supports fetching a list of all games.
+    """
+    def get(self):
+        """
+        This method returns all games.
+        """
+        return {
+            TYPE: DATA,
+            TITLE: 'Current Games',
+            DATA: gms.get_games(),
+            MENU: GAME_MENU_EP,
             RETURN: MAIN_MENU_EP,
         }
