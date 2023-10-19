@@ -17,3 +17,11 @@ games = {
 
 def get_games() -> dict:
     return games
+
+
+def add_game(name: str, num_players: int):
+    if name in games:
+        raise ValueError(f'Duplicate game name: {name=}')
+    if not name:
+        raise ValueError('Game name may not be blank')
+    games[name] = {NUM_PLAYERS: num_players}
