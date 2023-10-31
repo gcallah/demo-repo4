@@ -17,17 +17,16 @@ lint: $(patsubst %.py,%.pylint,$(PYTHONFILES))
 	$(LINTER) $(PYLINTFLAGS) $*.py
 
 pytests: FORCE
-	export TEST_DB=1; pytest $(PYTESTFLAGS) --cov=$(PKG)
+	pytest $(PYTESTFLAGS) --cov=$(PKG)
 
 # test a python file:
 %.py: FORCE
 	$(LINTER) $(PYLINTFLAGS) $@
-	export TEST_DB=1; pytest $(PYTESTFLAGS) tests/test_$*.py
+	pytest $(PYTESTFLAGS) tests/test_$*.py
 
 nocrud:
 	-rm *~
 	-rm *.log
 	-rm *.out
 	-rm .*swp
-	-rm *.csv
 	-rm $(TESTDIR)/*~

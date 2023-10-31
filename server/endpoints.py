@@ -2,11 +2,14 @@
 This is the file containing all of the endpoints for our flask app.
 The endpoint called `endpoints` will return all available endpoints.
 """
+from http import HTTPStatus
 
-from flask import Flask
-from flask_restx import Resource, Api
+from flask import Flask, request
+from flask_restx import Resource, Api, fields
 
-import data.games as gms
+import werkzeug.exceptions as wz
+
+import data.games as gm
 import data.users as users
 
 app = Flask(__name__)
@@ -21,6 +24,7 @@ HELLO_RESP = 'hello'
 GAMES_EP = '/games'
 GAME_MENU_EP = '/game_menu'
 GAME_MENU_NM = 'Game Menu'
+GAME_ID = 'Game ID'
 # USERS = 'users'
 USERS_EP = '/users'
 USER_MENU_EP = '/user_menu'
@@ -126,6 +130,12 @@ class Users(Resource):
         }
 
 
+game_fields = api.model('NewGame', {
+    gm.NAME: fields.String,
+    gm.NUM_PLAYERS: fields.Integer,
+})
+
+
 @api.route(f'{GAMES_EP}')
 class Games(Resource):
     """
@@ -138,7 +148,22 @@ class Games(Resource):
         return {
             TYPE: DATA,
             TITLE: 'Current Games',
-            DATA: gms.get_games(),
+            DATA: gm.get_games(),
             MENU: GAME_MENU_EP,
             RETURN: MAIN_MENU_EP,
         }
+
+    @api.expect(game_fields)
+    @api.response(HTTPStatus.OK, 'Success')
+    @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
+    def post(self):
+        """
+        Add a game.
+        """
+        name = request.json[gm.NAME]
+        num_players = request.json[gm.NUM_PLAYERS]
+        try:
+            new_id = gm.add_game(name, num_players)
+            return {GAME_ID: new_id}
+        except ValueError as e:
+            raise wz.NotAcceptable(f'{str(e)}')
