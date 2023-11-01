@@ -15,6 +15,10 @@ def test_gen_id():
     assert len(_id) == gm.ID_LEN
 
 
+def test_get_test_game():
+    assert isinstance(gm.get_test_game(), dict)
+
+
 def test_get_games():
     games = gm.get_games()
     assert isinstance(games, dict)
@@ -26,11 +30,17 @@ def test_get_games():
 
 
 def test_add_game_dup_name():
+    """
+    Make sure a duplicate game name raises a ValueError.
+    """
     with pytest.raises(ValueError):
         gm.add_game(gm.TEST_GAME_NAME, 4)
 
 
 def test_add_game_blank_name():
+    """
+    Make sure a blank game name raises a ValueError.
+    """
     with pytest.raises(ValueError):
         gm.add_game('', 4)
 

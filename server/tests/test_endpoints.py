@@ -2,6 +2,8 @@ from http.client import OK, NOT_FOUND, FORBIDDEN, NOT_ACCEPTABLE, BAD_REQUEST
 
 from unittest.mock import patch
 
+import pytest
+
 import data.games as gm
 
 import server.endpoints as ep
@@ -43,3 +45,9 @@ def test_games_bad_add(mock_add):
 def test_games_add():
     resp = TEST_CLIENT.post(ep.GAMES_EP, json=gm.get_test_game())
     assert resp.status_code == OK
+
+
+@pytest.mark.skip('This test is failing, but it is just an example of using '
+                   + 'skip')
+def test_that_doesnt_work():
+    assert False
