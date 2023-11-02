@@ -3,6 +3,14 @@ import pytest
 import data.games as gm
 
 
+@pytest.fixture(scope='function')
+def temp_game():
+    name = gm._get_test_name()
+    ret = gm.add_game(name, 0)
+    return name
+    # delete the game!
+
+
 def test_get_test_name():
     name = gm._get_test_name()
     assert isinstance(name, str)
@@ -29,12 +37,13 @@ def test_get_games():
     assert gm.TEST_GAME_NAME in games
 
 
-def test_add_game_dup_name():
+def test_add_game_dup_name(temp_game):
     """
     Make sure a duplicate game name raises a ValueError.
     """
+    dup_name = temp_game
     with pytest.raises(ValueError):
-        gm.add_game(gm.TEST_GAME_NAME, 4)
+        gm.add_game(dup_name, 4)
 
 
 def test_add_game_blank_name():

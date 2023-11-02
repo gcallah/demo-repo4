@@ -55,5 +55,9 @@ def add_game(name: str, num_players: int) -> str:
     return _gen_id()
 
 
+def get_name(game):
+    return game.get(NAME, '')
+
+
 def exists(name: str) -> bool:
     return name in get_games()
