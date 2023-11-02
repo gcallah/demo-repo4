@@ -6,6 +6,8 @@ import random
 ID_LEN = 24
 BIG_NUM = 100000000000000000000
 
+MOCK_ID = '0' * ID_LEN
+
 NAME = 'name'
 NUM_PLAYERS = 'numPlayers'
 TEST_GAME_NAME = 'Wizards Galore'
