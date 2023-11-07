@@ -4,22 +4,22 @@ games.py: the interface to our game data.
 import random
 
 ID_LEN = 24
-BIG_NUM = 100000000000000000000
+BIG_NUM = 100_000_000_000_000_000_000
 
 MOCK_ID = '0' * ID_LEN
 
 NAME = 'name'
 NUM_PLAYERS = 'numPlayers'
-TEST_GAME_NAME = 'Wizards Galore'
 
-games = {
-    'Dungeons and Dragons': {
-        NUM_PLAYERS: 3,
-    },
-    TEST_GAME_NAME: {
-        NUM_PLAYERS: 5,
-    },
-}
+games = {}
+# games = {
+#     'Dungeons and Dragons': {
+#         NUM_PLAYERS: 3,
+#     },
+#     TEST_GAME_NAME: {
+#         NUM_PLAYERS: 5,
+#     },
+# }
 
 
 def _get_test_name():
@@ -53,6 +53,13 @@ def add_game(name: str, num_players: int) -> str:
         raise ValueError('Game name may not be blank')
     games[name] = {NUM_PLAYERS: num_players}
     return _gen_id()
+
+
+def del_game(name: str):
+    if name in games:
+        del games[name]
+    else:
+        raise ValueError(f'Delete failure: {name} not in database.')
 
 
 def get_name(game):

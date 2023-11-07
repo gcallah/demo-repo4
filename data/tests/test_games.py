@@ -7,8 +7,9 @@ import data.games as gm
 def temp_game():
     name = gm._get_test_name()
     ret = gm.add_game(name, 0)
-    return name
-    # delete the game!
+    yield name
+    if gm.exists(name):
+        gm.del_game(name)
 
 
 def test_get_test_name():
@@ -27,14 +28,14 @@ def test_get_test_game():
     assert isinstance(gm.get_test_game(), dict)
 
 
-def test_get_games():
+def test_get_games(temp_game):
     games = gm.get_games()
     assert isinstance(games, dict)
     assert len(games) > 0
     for game in games:
         assert isinstance(game, str)
         assert isinstance(games[game], dict)
-    assert gm.TEST_GAME_NAME in games
+    assert gm.exists(temp_game)
 
 
 def test_add_game_dup_name(temp_game):
@@ -61,3 +62,17 @@ def test_add_game():
     ret = gm.add_game(ADD_NAME, 4)
     assert gm.exists(ADD_NAME)
     assert isinstance(ret, str)
+
+
+def test_del_game(temp_game):
+    name = temp_game
+    gm.del_game(name)
+    assert not gm.exists(name)
+
+
+def test_del_game_not_there():
+    name = gm._get_test_name()
+    with pytest.raises(ValueError):
+        gm.del_game(name)
+
+
