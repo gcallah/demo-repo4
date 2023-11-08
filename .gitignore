@@ -8,6 +8,7 @@ demo-repo4-venv
 
 # vim files
 *~
+*.swp
 
 # C extensions
 *.so
