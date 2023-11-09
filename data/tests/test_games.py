@@ -41,10 +41,10 @@ def test_get_games(temp_game):
 def test_add_game_dup_name(temp_game):
     """
     Make sure a duplicate game name raises a ValueError.
+    `temp_game` is the name of the game that our fixture added.
     """
-    dup_name = temp_game
     with pytest.raises(ValueError):
-        gm.add_game(dup_name, 4)
+        gm.add_game(temp_game, 4)
 
 
 def test_add_game_blank_name():
