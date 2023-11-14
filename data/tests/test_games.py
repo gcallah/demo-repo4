@@ -59,9 +59,11 @@ ADD_NAME = 'New Game'
 
 
 def test_add_game():
-    ret = gm.add_game(ADD_NAME, 4)
-    assert gm.exists(ADD_NAME)
-    assert isinstance(ret, str)
+    new_name = gm._get_test_name()
+    ret = gm.add_game(new_name, 4)
+    assert gm.exists(new_name)
+    assert isinstance(ret, bool)
+    gm.del_game(new_name)
 
 
 def test_del_game(temp_game):

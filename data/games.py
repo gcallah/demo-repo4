@@ -3,6 +3,10 @@ games.py: the interface to our game data.
 """
 import random
 
+import data.db_connect as dbc
+
+GAMES_COLLECT = 'games'
+
 ID_LEN = 24
 BIG_NUM = 100_000_000_000_000_000_000
 
@@ -12,14 +16,6 @@ NAME = 'name'
 NUM_PLAYERS = 'numPlayers'
 
 games = {}
-# games = {
-#     'Dungeons and Dragons': {
-#         NUM_PLAYERS: 3,
-#     },
-#     TEST_GAME_NAME: {
-#         NUM_PLAYERS: 5,
-#     },
-# }
 
 
 def _get_test_name():
@@ -43,21 +39,31 @@ def _gen_id() -> str:
 
 
 def get_games() -> dict:
-    return games
+    dbc.connect_db()
+    return dbc.fetch_all_as_dict(NAME, GAMES_COLLECT)
 
 
-def add_game(name: str, num_players: int) -> str:
-    if name in games:
+def exists(name: str) -> bool:
+    dbc.connect_db()
+    return dbc.fetch_one(GAMES_COLLECT, {NAME: name})
+
+
+def add_game(name: str, num_players: int) -> bool:
+    if exists(name):
         raise ValueError(f'Duplicate game name: {name=}')
     if not name:
         raise ValueError('Game name may not be blank')
-    games[name] = {NUM_PLAYERS: num_players}
-    return _gen_id()
+    game = {}
+    game[NAME] = name
+    game[NUM_PLAYERS] = num_players
+    dbc.connect_db()
+    _id = dbc.insert_one(GAMES_COLLECT, game)
+    return _id is not None
 
 
 def del_game(name: str):
-    if name in games:
-        del games[name]
+    if exists(name):
+        dbc.del_one(GAMES_COLLECT, {NAME: name})
     else:
         raise ValueError(f'Delete failure: {name} not in database.')
 
@@ -66,5 +72,9 @@ def get_name(game):
     return game.get(NAME, '')
 
 
-def exists(name: str) -> bool:
-    return name in get_games()
+def main():
+    print(get_games())
+
+
+if __name__ == '__main__':
+    main()
