@@ -63,7 +63,7 @@ def add_game(name: str, num_players: int) -> bool:
 
 def del_game(name: str):
     if exists(name):
-        dbc.del_one(GAMES_COLLECT, {NAME: name})
+        return dbc.del_one(GAMES_COLLECT, {NAME: name})
     else:
         raise ValueError(f'Delete failure: {name} not in database.')
 

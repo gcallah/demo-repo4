@@ -15,6 +15,7 @@ import data.users as users
 app = Flask(__name__)
 api = Api(app)
 
+DELETE = 'delete'
 DEFAULT = 'Default'
 MENU = 'menu'
 MAIN_MENU_EP = '/MainMenu'
@@ -22,10 +23,10 @@ MAIN_MENU_NM = "Welcome to Text Game!"
 HELLO_EP = '/hello'
 HELLO_RESP = 'hello'
 GAMES_EP = '/games'
+DEL_GAME_EP = f'{GAMES_EP}/{DELETE}'
 GAME_MENU_EP = '/game_menu'
 GAME_MENU_NM = 'Game Menu'
 GAME_ID = 'Game ID'
-# USERS = 'users'
 USERS_EP = '/users'
 USER_MENU_EP = '/user_menu'
 USER_MENU_NM = 'User Menu'
@@ -130,6 +131,24 @@ class Users(Resource):
         }
 
 
+@api.route(f'{DEL_GAME_EP}/<name>')
+class DelGame(Resource):
+    """
+    Deletes a game by name.
+    """
+    @api.response(HTTPStatus.OK, 'Success')
+    @api.response(HTTPStatus.NOT_FOUND, 'Not Found')
+    def delete(self, name):
+        """
+        Deletes a game by name.
+        """
+        try:
+            gm.del_game(name)
+            return {name: 'Deleted'}
+        except ValueError as e:
+            raise wz.NotFound(f'{str(e)}')
+
+
 game_fields = api.model('NewGame', {
     gm.NAME: fields.String,
     gm.NUM_PLAYERS: fields.Integer,
@@ -139,7 +158,8 @@ game_fields = api.model('NewGame', {
 @api.route(f'{GAMES_EP}')
 class Games(Resource):
     """
-    This class supports fetching a list of all games.
+    This class supports various operations on games, such as
+    listing them, and adding a game.
     """
     def get(self):
         """
