@@ -15,8 +15,6 @@ MOCK_ID = '0' * ID_LEN
 NAME = 'name'
 NUM_PLAYERS = 'numPlayers'
 
-games = {}
-
 
 def _get_test_name():
     name = 'test'
