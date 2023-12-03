@@ -20,5 +20,4 @@ then
     exit 1
 fi
 
-
 declare -a GameCollections=("games" "users")
