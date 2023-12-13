@@ -41,6 +41,33 @@ def test_games_get():
     assert isinstance(resp_json, dict)
 
 
+@patch('data.games.update_num_players', autospec=True)
+def test_games_update_num_players(mock_update):
+    """
+    Testing we do the right thing with a call to update_num_players that succeeds.
+    """
+    resp = TEST_CLIENT.put(f'{ep.GAMES_EP}/AnyName/100')
+    assert resp.status_code == OK
+
+
+@patch('data.games.del_game', autospec=True)
+def test_games_del(mock_del):
+    """
+    Testing we do the right thing with a call to del_game that succeeds.
+    """
+    resp = TEST_CLIENT.delete(f'{ep.DEL_GAME_EP}/AnyName')
+    assert resp.status_code == OK
+
+
+@patch('data.games.update_num_players', side_effect=ValueError(), autospec=True)
+def test_games_bad_update_num_players(mock_update):
+    """
+    Testing we do the right thing with a call to update_num_players that fails.
+    """
+    resp = TEST_CLIENT.put(f'{ep.GAMES_EP}/AnyName/100')
+    assert resp.status_code == NOT_FOUND
+
+
 @patch('data.games.del_game', autospec=True)
 def test_games_del(mock_del):
     """

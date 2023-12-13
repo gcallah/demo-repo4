@@ -189,3 +189,21 @@ class Games(Resource):
             return {GAME_ID: new_id}
         except ValueError as e:
             raise wz.NotAcceptable(f'{str(e)}')
+
+
+@api.route(f'{GAMES_EP}/<name>/<num_players>')
+class NumPlayers(Resource):
+    """
+    Updates the number of players in a game.
+    """
+    @api.response(HTTPStatus.OK, 'Success')
+    @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
+    def put(self, name, num_players):
+        """
+        Update the number of players in a game.
+        """
+        try:
+            gm.update_num_players(name, num_players)
+            return {name: 'Updated'}
+        except ValueError as e:
+            raise wz.NotFound(f'{str(e)}')
