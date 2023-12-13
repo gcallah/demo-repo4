@@ -41,9 +41,13 @@ def get_games() -> dict:
     return dbc.fetch_all_as_dict(NAME, GAMES_COLLECT)
 
 
-def exists(name: str) -> bool:
+def get_game(name: str) -> dict:
     dbc.connect_db()
     return dbc.fetch_one(GAMES_COLLECT, {NAME: name})
+
+
+def exists(name: str) -> bool:
+    return get_game(name) is not None
 
 
 def add_game(name: str, num_players: int) -> bool:
@@ -66,8 +70,21 @@ def del_game(name: str):
         raise ValueError(f'Delete failure: {name} not in database.')
 
 
-def get_name(game):
+def update_num_players(name: str, num_players: int) -> bool:
+    if not exists(name):
+        raise ValueError(f'Update failure: {name} not in database.')
+    else:
+        dbc.connect_db()
+        return dbc.update_doc(GAMES_COLLECT, {NAME: name},
+                              {NUM_PLAYERS: num_players})
+
+
+def get_name(game: dict):
     return game.get(NAME, '')
+
+
+def get_num_players(game: dict):
+    return game.get(NUM_PLAYERS)
 
 
 def main():

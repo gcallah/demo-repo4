@@ -12,6 +12,18 @@ def temp_game():
         gm.del_game(name)
 
 
+def test_update_num_players(temp_game):
+    NEW_NUM = 10
+    gm.update_num_players(temp_game, NEW_NUM)
+    updated_game = gm.get_game(temp_game)
+    assert gm.get_num_players(updated_game) == NEW_NUM
+
+
+def test_get_game(temp_game):
+    game = gm.get_game(temp_game)
+    assert isinstance(game, dict)
+
+
 def test_get_test_name():
     name = gm._get_test_name()
     assert isinstance(name, str)
@@ -76,5 +88,3 @@ def test_del_game_not_there():
     name = gm._get_test_name()
     with pytest.raises(ValueError):
         gm.del_game(name)
-
-

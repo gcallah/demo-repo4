@@ -32,7 +32,6 @@ def connect_db():
             client = pm.MongoClient(f'mongodb+srv://gcallah:{password}'
                                     + '@koukoumongo1.yud9b.mongodb.net/'
                                     + '?retryWrites=true&w=majority')
-            # + '@cluster0.eqxbbqd.mongodb.net/'
         else:
             print("Connecting to Mongo locally.")
             client = pm.MongoClient()
@@ -49,6 +48,7 @@ def insert_one(collection, doc, db=GAME_DB):
 def fetch_one(collection, filt, db=GAME_DB):
     """
     Find with a filter and return on the first doc found.
+    Return None if not found.
     """
     for doc in client[db][collection].find(filt):
         if MONGO_ID in doc:
