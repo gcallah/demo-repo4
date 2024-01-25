@@ -1,6 +1,6 @@
 #!/bin/bash
 # This runs on PythonAnywhere servers: fetches new code,
-# Installs needed packages, and restarts the server.
+# installs needed packages, and restarts the server.
 
 touch rebuild
 echo "Rebuilding $PA_DOMAIN"
