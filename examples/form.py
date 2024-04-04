@@ -23,7 +23,7 @@ LOGIN_FORM_FLDS = [
     },
     {
         FLD_NM: PASSWORD,
-        ff.QSTN: 'Passwod:',
+        ff.QSTN: 'Password:',
         ff.PARAM_TYPE: ff.QUERY_STR,
         ff.OPT: False,
     },
