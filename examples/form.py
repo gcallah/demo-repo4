@@ -6,43 +6,43 @@ import examples.form_filler as ff
 
 from examples.form_filler import FLD_NM  # for tests
 
-ACRONYM = 'acronym'
-TERM = 'term'
+USERNAME = 'username'
+PASSWORD = 'password'
 
-GLOSSARY_FORM_FLDS = [
+LOGIN_FORM_FLDS = [
     {
         FLD_NM: 'Instructions',
-        ff.QSTN: 'Leave all fields blank to see all glossary entries.',
+        ff.QSTN: 'Enter your username and password.',
         ff.INSTRUCTIONS: True,
     },
     {
-        FLD_NM: ACRONYM,
-        ff.QSTN: 'Acronym:',
+        FLD_NM: USERNAME,
+        ff.QSTN: 'User name:',
         ff.PARAM_TYPE: ff.QUERY_STR,
-        ff.OPT: True,
+        ff.OPT: False,
     },
     {
-        FLD_NM: TERM,
-        ff.QSTN: 'Term:',
+        FLD_NM: PASSWORD,
+        ff.QSTN: 'Passwod:',
         ff.PARAM_TYPE: ff.QUERY_STR,
-        ff.OPT: True,
+        ff.OPT: False,
     },
 ]
 
 
 def get_form() -> list:
-    return GLOSSARY_FORM_FLDS
+    return LOGIN_FORM_FLDS
 
 
 def get_form_descr() -> dict:
     """
     For Swagger!
     """
-    return ff.get_form_descr(GLOSSARY_FORM_FLDS)
+    return ff.get_form_descr(LOGIN_FORM_FLDS)
 
 
 def get_fld_names() -> list:
-    return ff.get_fld_names(GLOSSARY_FORM_FLDS)
+    return ff.get_fld_names(LOGIN_FORM_FLDS)
 
 
 def main():
