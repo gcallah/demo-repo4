@@ -1,3 +1,7 @@
+"""
+All interaction with MongoDB should be through this file!
+We may be required to use a new database at any point.
+"""
 import os
 
 import pymongo as pm
