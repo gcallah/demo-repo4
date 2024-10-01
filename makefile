@@ -1,5 +1,6 @@
 include common.mk
 
+# Our directories
 API_DIR = server
 DB_DIR = data
 REQ_DIR = .
