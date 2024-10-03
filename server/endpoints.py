@@ -88,3 +88,10 @@ class People(Resource):
         Retrieve the journal people.
         """
         return ppl.get_people()
+
+
+@api.route(f'{PEOPLE_EP}/<_id>')
+class Person(Resource):
+    def delete(self, _id):
+        ret = ppl.delete_person(_id)
+        return {'Message': ret}
