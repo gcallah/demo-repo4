@@ -1,0 +1,23 @@
+# People Requirements
+
+- There are a number of types of people associated with a journal.
+    - editors
+    - authors
+    - referees
+    - managing
+    - editors
+    - copy
+    - editors
+    - typesetters
+- Any person can have any number of roles
+- We need endpoints to:
+    - create new people
+    - read the existing people
+    - update people
+    - delete people
+- There should be a data layer that the endpoints make use of.
+- We can add roles to existing people.
+- Other person fields include:
+    - name
+    - affiliation
+    - email address
