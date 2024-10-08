@@ -91,7 +91,54 @@ class People(Resource):
 
 
 @api.route(f'{PEOPLE_EP}/<_id>')
-class Person(Resource):
+class PersonDelete(Resource):
     def delete(self, _id):
         ret = ppl.delete_person(_id)
         return {'Message': ret}
+
+
+# PEOPLE_CREATE_FLDS = api.model('AddNewPeopleEntry', {
+#     pflds.NAME: fields.String,
+#     pflds.EMAIL: fields.String,
+#     pflds.AFFILIATION: fields.String,
+#     EDITOR: fields.String,
+# })
+
+
+# PEOPLE_CREATE_FORM = 'People Add Form'
+
+
+# @api.route(f'/{PEOPLE}/{CREATE}/{FORM}')
+# class PeopleAddForm(Resource):
+#     """
+#     Form to add a new person to the journal database.
+#     """
+#     def get(self):
+#         return {PEOPLE_CREATE_FORM: pfrm.get_add_form()}
+
+
+# @api.route(f'/{PEOPLE}/{CREATE}')
+# @api.expect(parser)
+# class PeopleCreate(Resource):
+#     """
+#     Add a person to the journal db.
+#     """
+#     @api.response(HTTPStatus.OK, 'Success')
+#     @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not acceptable')
+#     @api.expect(PEOPLE_CREATE_FLDS)
+#     def put(self):
+#         """
+#         Add a person.
+#         """
+#         user_id, auth_key = _get_user_info(request)
+#         if not sm.is_permitted(PROTOCOL_NM, sm.CREATE, user_id=user_id,
+#                                auth_key=auth_key):
+#             raise wz.Forbidden('Action not permitted.')
+#         try:
+#             ret = pqry.add(request.json)
+#         except Exception as err:
+#             raise wz.NotAcceptable(f'Could not add person: '
+#                                    f'{err=}')
+#         return {
+#             MESSAGE: 'Person added!', 'ret': ret,
+#         }
