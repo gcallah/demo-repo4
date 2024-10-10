@@ -2,13 +2,13 @@
 This is the file containing all of the endpoints for our flask app.
 The endpoint called `endpoints` will return all available endpoints.
 """
-# from http import HTTPStatus
+from http import HTTPStatus
 
 from flask import Flask  # , request
 from flask_restx import Resource, Api  # Namespace, fields
 from flask_cors import CORS
 
-# import werkzeug.exceptions as wz
+import werkzeug.exceptions as wz
 
 import data.people as ppl
 
@@ -92,9 +92,14 @@ class People(Resource):
 
 @api.route(f'{PEOPLE_EP}/<_id>')
 class PersonDelete(Resource):
+    @api.response(HTTPStatus.OK, 'Success.')
+    @api.response(HTTPStatus.NOT_FOUND, 'No such person.')
     def delete(self, _id):
-        ret = ppl.delete_person(_id)
-        return {'Message': ret}
+        ret = ppl.delete(_id)
+        if ret is not None:
+            return {'Deleted': ret}
+        else:
+            raise wz.NotFound(f'No such person: {_id}')
 
 
 # PEOPLE_CREATE_FLDS = api.model('AddNewPeopleEntry', {
@@ -108,7 +113,7 @@ class PersonDelete(Resource):
 # PEOPLE_CREATE_FORM = 'People Add Form'
 
 
-# @api.route(f'/{PEOPLE}/{CREATE}/{FORM}')
+# @api.route(f'/{PEOPLE_EP}/{CREATE}/{FORM}')
 # class PeopleAddForm(Resource):
 #     """
 #     Form to add a new person to the journal database.
@@ -117,8 +122,7 @@ class PersonDelete(Resource):
 #         return {PEOPLE_CREATE_FORM: pfrm.get_add_form()}
 
 
-# @api.route(f'/{PEOPLE}/{CREATE}')
-# @api.expect(parser)
+# @api.route(f'/{PEOPLE_EP}/create')
 # class PeopleCreate(Resource):
 #     """
 #     Add a person to the journal db.
@@ -130,12 +134,7 @@ class PersonDelete(Resource):
 #         """
 #         Add a person.
 #         """
-#         user_id, auth_key = _get_user_info(request)
-#         if not sm.is_permitted(PROTOCOL_NM, sm.CREATE, user_id=user_id,
-#                                auth_key=auth_key):
-#             raise wz.Forbidden('Action not permitted.')
-#         try:
-#             ret = pqry.add(request.json)
+          ret = pqry.create(request.json)
 #         except Exception as err:
 #             raise wz.NotAcceptable(f'Could not add person: '
 #                                    f'{err=}')

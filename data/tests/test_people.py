@@ -3,8 +3,8 @@ import pytest
 import data.people as ppl
 
 
-def test_get_people():
-    people = ppl.get_people()
+def test_read():
+    people = ppl.read()
     assert isinstance(people, dict)
     assert len(people) > 0
     # check for string IDs:
@@ -13,11 +13,11 @@ def test_get_people():
         assert ppl.NAME in person
 
 
-def test_del_person():
-    people = ppl.get_people()
+def test_delete():
+    people = ppl.read()
     old_len = len(people)
-    ppl.delete_person(ppl.DEL_EMAIL)
-    people = ppl.get_people()
+    ppl.delete(ppl.DEL_EMAIL)
+    people = ppl.read()
     assert len(people) < old_len
     assert ppl.DEL_EMAIL not in people
 
@@ -25,15 +25,15 @@ def test_del_person():
 ADD_EMAIL = 'joe@nyu.edu'
 
 
-def test_create_person():
-    people = ppl.get_people()
+def test_create():
+    people = ppl.read()
     assert ADD_EMAIL not in people
-    ppl.create_person('Joe Smith', 'NYU', ADD_EMAIL)
-    people = ppl.get_people()
+    ppl.create('Joe Smith', 'NYU', ADD_EMAIL)
+    people = ppl.read()
     assert ADD_EMAIL in people
 
 
-def test_create_duplicate_person():
+def test_create_duplicate():
     with pytest.raises(ValueError):
-        ppl.create_person('Do not care about name',
-                          'Or affiliation', ppl.TEST_EMAIL)
+        ppl.create('Do not care about name',
+                   'Or affiliation', ppl.TEST_EMAIL)

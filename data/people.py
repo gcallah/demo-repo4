@@ -28,7 +28,7 @@ people_dict = {
 }
 
 
-def get_people():
+def read():
     """
     Our contract:
         - No arguments.
@@ -39,8 +39,8 @@ def get_people():
     return people
 
 
-def delete_person(_id):
-    people = get_people()
+def delete(_id):
+    people = read()
     if _id in people:
         del people[_id]
         return _id
@@ -48,8 +48,16 @@ def delete_person(_id):
         return None
 
 
-def create_person(name: str, affiliation: str, email: str):
+def create(name: str, affiliation: str, email: str):
     if email in people_dict:
         raise ValueError(f'Adding duplicate {email=}')
     people_dict[email] = {NAME: name, AFFILIATION: affiliation,
                           EMAIL: email}
+
+
+def main():
+    print(read())
+
+
+if __name__ == '__main__':
+    main()
