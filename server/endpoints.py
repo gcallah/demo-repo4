@@ -4,8 +4,8 @@ The endpoint called `endpoints` will return all available endpoints.
 """
 from http import HTTPStatus
 
-from flask import Flask  # , request
-from flask_restx import Resource, Api  # Namespace, fields
+from flask import Flask, request
+from flask_restx import Resource, Api, fields  # Namespace
 from flask_cors import CORS
 
 import werkzeug.exceptions as wz
@@ -24,9 +24,11 @@ ENDPOINT_EP = '/endpoints'
 ENDPOINT_RESP = 'Available endpoints'
 HELLO_EP = '/hello'
 HELLO_RESP = 'hello'
+MESSAGE = 'Message'
 PEOPLE_EP = '/people'
 PUBLISHER = 'Palgave'
 PUBLISHER_RESP = 'Publisher'
+RETURN = 'return'
 TITLE = 'The Journal of API Technology'
 TITLE_EP = '/title'
 TITLE_RESP = 'Title'
@@ -87,7 +89,7 @@ class People(Resource):
         """
         Retrieve the journal people.
         """
-        return ppl.get_people()
+        return ppl.read()
 
 
 @api.route(f'{PEOPLE_EP}/<_id>')
@@ -102,12 +104,11 @@ class PersonDelete(Resource):
             raise wz.NotFound(f'No such person: {_id}')
 
 
-# PEOPLE_CREATE_FLDS = api.model('AddNewPeopleEntry', {
-#     pflds.NAME: fields.String,
-#     pflds.EMAIL: fields.String,
-#     pflds.AFFILIATION: fields.String,
-#     EDITOR: fields.String,
-# })
+PEOPLE_CREATE_FLDS = api.model('AddNewPeopleEntry', {
+    ppl.NAME: fields.String,
+    ppl.EMAIL: fields.String,
+    ppl.AFFILIATION: fields.String,
+})
 
 
 # PEOPLE_CREATE_FORM = 'People Add Form'
@@ -122,22 +123,27 @@ class PersonDelete(Resource):
 #         return {PEOPLE_CREATE_FORM: pfrm.get_add_form()}
 
 
-# @api.route(f'/{PEOPLE_EP}/create')
-# class PeopleCreate(Resource):
-#     """
-#     Add a person to the journal db.
-#     """
-#     @api.response(HTTPStatus.OK, 'Success')
-#     @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not acceptable')
-#     @api.expect(PEOPLE_CREATE_FLDS)
-#     def put(self):
-#         """
-#         Add a person.
-#         """
-          ret = pqry.create(request.json)
-#         except Exception as err:
-#             raise wz.NotAcceptable(f'Could not add person: '
-#                                    f'{err=}')
-#         return {
-#             MESSAGE: 'Person added!', 'ret': ret,
-#         }
+@api.route(f'{PEOPLE_EP}/create')
+class PeopleCreate(Resource):
+    """
+    Add a person to the journal db.
+    """
+    @api.response(HTTPStatus.OK, 'Success')
+    @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not acceptable')
+    @api.expect(PEOPLE_CREATE_FLDS)
+    def put(self):
+        """
+        Add a person.
+        """
+        try:
+            name = request.json.get(ppl.NAME)
+            affiliation = request.json.get(ppl.AFFILIATION)
+            email = request.json.get(ppl.EMAIL)
+            ret = ppl.create(name, affiliation, email)
+        except Exception as err:
+            raise wz.NotAcceptable(f'Could not add person: '
+                                   f'{err=}')
+        return {
+            MESSAGE: 'Person added!',
+            RETURN: ret,
+        }
