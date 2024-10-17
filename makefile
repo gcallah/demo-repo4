@@ -5,8 +5,6 @@ API_DIR = server
 DB_DIR = data
 REQ_DIR = .
 
-PYTESTFLAGS = -vv --verbose --cov-branch --cov-report term-missing --tb=short -W ignore::FutureWarning
-
 FORCE:
 
 prod: all_tests github
