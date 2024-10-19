@@ -56,9 +56,15 @@ def delete(_id):
         return None
 
 
+def is_valid_person(person: dict):
+    pass
+
+
 def create(name: str, affiliation: str, email: str):
     if email in people_dict:
         raise ValueError(f'Adding duplicate {email=}')
+    if not is_valid_email(email):
+        raise ValueError(f'Invalid email: {email}')
     people_dict[email] = {NAME: name, AFFILIATION: affiliation,
                           EMAIL: email}
     return email
