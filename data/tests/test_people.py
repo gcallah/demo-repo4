@@ -53,3 +53,9 @@ def test_create_duplicate():
     with pytest.raises(ValueError):
         ppl.create('Do not care about name',
                    'Or affiliation', ppl.TEST_EMAIL)
+
+
+def test_create_bad_email():
+    with pytest.raises(ValueError):
+        ppl.create('Do not care about name',
+                   'Or affiliation', 'bademail')
