@@ -3,6 +3,8 @@ This module interfaces to our user data.
 """
 import re
 
+import data.roles as rls
+
 MIN_USER_NAME_LEN = 2
 # fields
 NAME = 'name'
@@ -56,16 +58,19 @@ def delete(_id):
         return None
 
 
-def is_valid_person(name: str, affiliation: str, email: str) -> bool:
+def is_valid_person(name: str, affiliation: str, email: str,
+                    role: str) -> bool:
     if email in people_dict:
         raise ValueError(f'Adding duplicate {email=}')
     if not is_valid_email(email):
         raise ValueError(f'Invalid email: {email}')
+    if not rls.is_valid(role):
+        raise ValueError(f'Invalid role: {role}')
     return True
 
 
-def create(name: str, affiliation: str, email: str):
-    if is_valid_person(name, affiliation, email):
+def create(name: str, affiliation: str, email: str, role: str):
+    if is_valid_person(name, affiliation, email, role):
         people_dict[email] = {NAME: name, AFFILIATION: affiliation,
                               EMAIL: email}
         return email
