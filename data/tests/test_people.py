@@ -61,3 +61,8 @@ def test_create_bad_email():
     with pytest.raises(ValueError):
         ppl.create('Do not care about name',
                    'Or affiliation', 'bademail', TEST_CODE)
+
+
+def test_get_masthead():
+    mh = ppl.get_masthead()
+    assert isinstance(mh, dict)
