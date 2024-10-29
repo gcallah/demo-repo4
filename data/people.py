@@ -32,13 +32,17 @@ people_dict = {
 
 
 CHAR_OR_DIGIT = '[A-Za-z0-9]'
+VALID_CHARS = '[A-Za-z0-9_.]'
 
 
 def is_valid_email(email: str) -> bool:
-    return re.match(f"{CHAR_OR_DIGIT}.*@{CHAR_OR_DIGIT}.*", email)
+    return re.fullmatch(f"{VALID_CHARS}+@{CHAR_OR_DIGIT}+"
+                        + "\\."
+                        + f"{CHAR_OR_DIGIT}"
+                        + "{2,3}", email)
 
 
-def read():
+def read() -> dict:
     """
     Our contract:
         - No arguments.
@@ -47,6 +51,14 @@ def read():
     """
     people = people_dict
     return people
+
+
+def read_one(email: str) -> dict:
+    """
+    Return a person record if email present in DB,
+    else None.
+    """
+    return people_dict.get(email)
 
 
 def delete(_id):
@@ -59,20 +71,37 @@ def delete(_id):
 
 
 def is_valid_person(name: str, affiliation: str, email: str,
-                    role: str) -> bool:
-    if email in people_dict:
-        raise ValueError(f'Adding duplicate {email=}')
+                    role: str = None, roles: list = None) -> bool:
     if not is_valid_email(email):
         raise ValueError(f'Invalid email: {email}')
-    if not rls.is_valid(role):
-        raise ValueError(f'Invalid role: {role}')
+    if role:
+        if not rls.is_valid(role):
+            raise ValueError(f'Invalid role: {role}')
+    elif roles:
+        for role in roles:
+            if not rls.is_valid(role):
+                raise ValueError(f'Invalid role: {role}')
     return True
 
 
 def create(name: str, affiliation: str, email: str, role: str):
-    if is_valid_person(name, affiliation, email, role):
+    if email in people_dict:
+        raise ValueError(f'Adding duplicate {email=}')
+    if is_valid_person(name, affiliation, email, role=role):
+        roles = []
+        if role:
+            roles.append(role)
         people_dict[email] = {NAME: name, AFFILIATION: affiliation,
-                              EMAIL: email}
+                              EMAIL: email, ROLES: roles}
+        return email
+
+
+def update(name: str, affiliation: str, email: str, roles: list):
+    if email not in people_dict:
+        raise ValueError(f'Updating non-existent person: {email=}')
+    if is_valid_person(name, affiliation, email, roles=roles):
+        people_dict[email] = {NAME: name, AFFILIATION: affiliation,
+                              EMAIL: email, ROLES: roles}
         return email
 
 
@@ -87,10 +116,6 @@ def get_masthead() -> dict:
             #     put their record in people_w_role
         masthead[text] = people_w_role
     return masthead
-
-
-def update():
-    pass
 
 
 def main():
