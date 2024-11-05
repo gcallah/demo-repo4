@@ -11,14 +11,18 @@ ME_CODE = 'ME'
 CE_CODE = 'CE'
 
 ROLES = {
-    AUTHOR_CODE: 'Author',
-    CE_CODE: 'Consulting Editor',
     ED_CODE: 'Editor',
     ME_CODE: 'Managing Editor',
+    CE_CODE: 'Consulting Editor',
+    AUTHOR_CODE: 'Author',
     'RE': 'Referee',
 }
 
-MH_ROLES = [CE_CODE, ED_CODE, ME_CODE]
+MH_ROLES = [
+    ED_CODE,
+    ME_CODE,
+    CE_CODE,
+]
 
 
 def get_roles() -> dict:
