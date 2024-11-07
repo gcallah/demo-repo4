@@ -49,8 +49,8 @@ def read() -> dict:
         - Returns a dictionary of users keyed on user email.
         - Each user email must be the key for another dictionary.
     """
-    people = people_dict
-    return people
+    print('read() has been called')
+    return people_dict
 
 
 def read_one(email: str) -> dict:
