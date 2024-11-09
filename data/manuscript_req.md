@@ -15,4 +15,4 @@
 
 ## State changes:
 
-These are documented in [this flow chart]().
+These are documented in [this flow chart](https://github.com/gcallah/demo-repo4/blob/master/data/Manuscript_FSM.jpg).
