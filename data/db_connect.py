@@ -62,11 +62,13 @@ def fetch_one(collection, filt, db=SE_DB):
         return doc
 
 
-def del_one(collection, filt, db=SE_DB):
+def delete(collection: str, filt: dict, db=SE_DB):
     """
     Find with a filter and return on the first doc found.
     """
-    client[db][collection].delete_one(filt)
+    print(f'{filt=}')
+    del_result = client[db][collection].delete_one(filt)
+    return del_result.deleted_count
 
 
 def update_doc(collection, filters, update_dict, db=SE_DB):
