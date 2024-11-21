@@ -16,10 +16,10 @@ TEMP_EMAIL = 'temp_person@temp.org'
 
 @pytest.fixture(scope='function')
 def temp_person():
-    _id = ppl.create('Joe Smith', 'NYU', TEMP_EMAIL, TEST_ROLE_CODE)
-    yield _id
+    email = ppl.create('Joe Smith', 'NYU', TEMP_EMAIL, TEST_ROLE_CODE)
+    yield email
     try:
-        ppl.delete(_id)
+        ppl.delete(email)
     except:
         print('Person already deleted.')
 
