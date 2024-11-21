@@ -18,25 +18,8 @@ EMAIL = 'email'
 TEST_EMAIL = 'ejc369@nyu.edu'
 DEL_EMAIL = 'delete@nyu.edu'
 
-people_dict = {
-    TEST_EMAIL: {
-        NAME: 'Eugene Callahan',
-        ROLES: [rls.ED_CODE],
-        AFFILIATION: 'NYU',
-        EMAIL: TEST_EMAIL,
-    },
-    DEL_EMAIL: {
-        NAME: 'Jeffrey Person',
-        ROLES: [rls.CE_CODE],
-        AFFILIATION: 'NYU',
-        EMAIL: DEL_EMAIL,
-    },
-}
-
-
 client = dbc.connect_db()
 print(f'{client=}')
-
 
 CHAR_OR_DIGIT = '[A-Za-z0-9]'
 VALID_CHARS = '[A-Za-z0-9_.]'
@@ -66,7 +49,11 @@ def read_one(email: str) -> dict:
     Return a person record if email present in DB,
     else None.
     """
-    return people_dict.get(email)
+    return dbc.read_one(PEOPLE_COLLECT, {EMAIL: email})
+
+
+def exists(email: str) -> bool:
+    return read_one(email) is not None
 
 
 def delete(email: str):
@@ -89,7 +76,7 @@ def is_valid_person(name: str, affiliation: str, email: str,
 
 
 def create(name: str, affiliation: str, email: str, role: str):
-    if email in people_dict:
+    if exists(email):
         raise ValueError(f'Adding duplicate {email=}')
     if is_valid_person(name, affiliation, email, role=role):
         roles = []
@@ -103,11 +90,14 @@ def create(name: str, affiliation: str, email: str, role: str):
 
 
 def update(name: str, affiliation: str, email: str, roles: list):
-    if email not in people_dict:
+    if not exists(email):
         raise ValueError(f'Updating non-existent person: {email=}')
     if is_valid_person(name, affiliation, email, roles=roles):
-        people_dict[email] = {NAME: name, AFFILIATION: affiliation,
-                              EMAIL: email, ROLES: roles}
+        ret = dbc.update(PEOPLE_COLLECT,
+                         {EMAIL: email},
+                         {NAME: name, AFFILIATION: affiliation,
+                          EMAIL: email, ROLES: roles})
+        print(f'{ret=}')
         return email
 
 
