@@ -11,6 +11,7 @@
     - dual factor
     - biometrics
     - IP address
+- If there is no security record for some feature, it is open to all.
 
 ## Design
 
