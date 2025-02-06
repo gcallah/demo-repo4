@@ -10,6 +10,7 @@ from flask_cors import CORS
 
 import werkzeug.exceptions as wz
 
+import data.manuscripts as manu
 import data.people as ppl
 
 app = Flask(__name__)
@@ -25,6 +26,7 @@ ENDPOINT_RESP = 'Available endpoints'
 HELLO_EP = '/hello'
 HELLO_RESP = 'hello'
 MESSAGE = 'Message'
+MANU_EP = '/manuscripts'
 PEOPLE_EP = '/people'
 PUBLISHER = 'Palgave'
 PUBLISHER_RESP = 'Publisher'
@@ -126,18 +128,6 @@ PEOPLE_CREATE_FLDS = api.model('AddNewPeopleEntry', {
 })
 
 
-# PEOPLE_CREATE_FORM = 'People Add Form'
-
-
-# @api.route(f'/{PEOPLE_EP}/{CREATE}/{FORM}')
-# class PeopleAddForm(Resource):
-#     """
-#     Form to add a new person to the journal database.
-#     """
-#     def get(self):
-#         return {PEOPLE_CREATE_FORM: pfrm.get_add_form()}
-
-
 @api.route(f'{PEOPLE_EP}/create')
 class PeopleCreate(Resource):
     """
@@ -175,3 +165,38 @@ class Masthead(Resource):
     """
     def get(self):
         return {MASTHEAD: ppl.get_masthead()}
+
+
+MANU_ACTION_FLDS = api.model('ManuscriptAction', {
+    manu.MANU_ID: fields.String,
+    manu.CURR_STATE: fields.String,
+    manu.ACTION: fields.String,
+    manu.REFEREE: fields.String,
+})
+
+
+@api.route(f'{MANU_EP}/receive_action')
+class ReceiveAction(Resource):
+    """
+    Receive an action for a manuscript.
+    """
+    @api.response(HTTPStatus.OK, 'Success')
+    @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not acceptable')
+    @api.expect(MANU_ACTION_FLDS)
+    def put(self):
+        """
+        Receive an action for a manuscript.
+        """
+        try:
+            manu_id = request.json.get(manu.MANU_ID)
+            curr_state = request.json.get(manu.CURR_STATE)
+            action = request.json.get(manu.ACTION)
+            kwargs = {}
+            kwargs[manu.REFEREE] = request.json.get(manu.REFEREE)
+            ret = manu.handle_action(manu_id, curr_state, action, **kwargs)
+        except Exception as err:
+            raise wz.NotAcceptable(f'Bad action: ' f'{err=}')
+        return {
+            MESSAGE: 'Action received!',
+            RETURN: ret,
+        }
