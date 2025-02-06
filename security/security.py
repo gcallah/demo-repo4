@@ -88,7 +88,7 @@ def needs_recs(fn):
     @wraps(fn)
     def wrapper(*args, **kwargs):
         global security_recs
-        if not security_recs
+        if not security_recs:
             security_recs = read()
         return fn(*args, **kwargs)
     return wrapper
