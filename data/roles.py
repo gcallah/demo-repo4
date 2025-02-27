@@ -9,13 +9,14 @@ TEST_CODE = AUTHOR_CODE
 ED_CODE = 'ED'
 ME_CODE = 'ME'
 CE_CODE = 'CE'
+RE_CODE = 'RE'
 
 ROLES = {
     ED_CODE: 'Editor',
     ME_CODE: 'Managing Editor',
     CE_CODE: 'Consulting Editor',
     AUTHOR_CODE: 'Author',
-    'RE': 'Referee',
+    RE_CODE: 'Referee',
 }
 
 MH_ROLES = [
@@ -25,8 +26,12 @@ MH_ROLES = [
 ]
 
 
-def get_roles() -> dict:
+def read() -> dict:
     return deepcopy(ROLES)
+
+
+def get_roles() -> dict:
+    return read()
 
 
 def get_masthead_roles() -> dict:

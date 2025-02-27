@@ -12,6 +12,7 @@ import werkzeug.exceptions as wz
 
 import data.manuscripts as manu
 import data.people as ppl
+import data.roles as rls
 
 app = Flask(__name__)
 CORS(app)
@@ -30,6 +31,7 @@ MANU_EP = '/manuscripts'
 PEOPLE_EP = '/people'
 PUBLISHER = 'Palgave'
 PUBLISHER_RESP = 'Publisher'
+ROLES_EP = '/roles'
 RETURN = 'return'
 TITLE = 'The Journal of API Technology'
 TITLE_EP = '/title'
@@ -79,6 +81,18 @@ class JournalTitle(Resource):
             DATE_RESP: DATE,
             PUBLISHER_RESP: PUBLISHER,
         }
+
+
+@api.route(ROLES_EP)
+class Roles(Resource):
+    """
+    This class handles reading person roles.
+    """
+    def get(self):
+        """
+        Retrieve the journal person roles.
+        """
+        return rls.read()
 
 
 @api.route(PEOPLE_EP)
