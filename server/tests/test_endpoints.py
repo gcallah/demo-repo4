@@ -52,13 +52,13 @@ def test_read(mock_read):
 @patch(PEOPLE_LOC + 'read_one', autospec=True,
        return_value={NAME: 'Joe Schmoe'})
 def test_read_one(mock_read):
-    resp = TEST_CLIENT.get(f'{ep.PEOPLE_EP}/mock_id')
+    resp = TEST_CLIENT.get(f'{ep.PEOPLE_EP}/mock_id/fake_user')
     assert resp.status_code == OK
 
 
 @patch(PEOPLE_LOC + 'read_one', autospec=True, return_value=None)
 def test_read_one_not_found(mock_read):
-    resp = TEST_CLIENT.get(f'{ep.PEOPLE_EP}/mock_id')
+    resp = TEST_CLIENT.get(f'{ep.PEOPLE_EP}/mock_id/fake_user')
     assert resp.status_code == NOT_FOUND
 
 
